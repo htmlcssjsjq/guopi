@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Swiper mac demo</title>
+    <link href="css/swiper.min.css" rel="stylesheet">
+    <link href="css/mac.css" rel="stylesheet">
+</head>
+<body>
+<div id="mac-video">
+    <h1>Behind the Mac</h1>
+    <div class="swiper-container" id="title">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide photographer"><h3>Photographer</h3></div>
+            <div class="swiper-slide coder"><h3>Coder</h3></div>
+            <div class="swiper-slide musician"><h3>Musician</h3></div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="swiper-container" id="videos">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="txt"><p class="desc">Learn how photographer Bruce Hall, who is
+                    legally blind, uses&nbsp;his Mac to create beautiful images.</p>
+                    <p>Watch the film</p></div>
+                <video loop src="https://www.swiper.com.cn/demo/mac/video/photographer.mp4"></video>
+            </div>
+            <div class="swiper-slide">
+                <div class="txt"><p class="desc">See how Peter Kariuki developed an app on his
+                    Mac that’s helping make Rwanda’s roads safer.</p>
+                    <p>Watch the film</p></div>
+                <video loop="true" src="https://www.swiper.com.cn/demo/mac/video/coder.mp4"></video>
+            </div>
+            <div class="swiper-slide">
+                <div class="txt"><p class="desc">Discover how Grimes writes, records, and
+                    produces her own music — all on her Mac.</p>
+                    <p>Watch the film</p></div>
+                <video loop="true" src="https://www.swiper.com.cn/demo/mac/video/musician.mp4"></video>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/swiper.min.js"></script>
+<script>
+    var swiperTitle = new Swiper("#title", {
+        allowTouchMove: !1,
+        speed: 1E3,
+        slideToClickedSlide: !0,
+        slidesPerView: "auto",
+        loop: !0,
+        loopedSlides: 3,
+        slidesOffsetBefore: window.innerWidth / 2 - 490,
+        pagination: {el: ".swiper-pagination", clickable: !0},
+        on: {
+            transitionStart: function () {
+                indexTitle = this.$el.find(".swiper-slide-active").index();
+                this.slides.find("h3").transition(1E3);
+                this.slides.eq(indexTitle).prevAll().removeClass("next").addClass("prev");
+                this.slides.eq(indexTitle).nextAll().removeClass("prev").addClass("next");
+                this.slides.eq(indexTitle).removeClass("prev next")
+            }, transitionEnd: function () {
+                indexTitle = this.$el.find(".swiper-slide-active").index();
+                this.slides.find("h3").transition(0);
+                this.slides.eq(indexTitle).prevAll().removeClass("next").addClass("prev");
+                this.slides.eq(indexTitle).nextAll().removeClass("prev").addClass("next");
+                this.slides.eq(indexTitle).removeClass("prev next");
+                swiper = this;
+                setTimeout(function () {
+                    swiper.slides.find("h3").transition("")
+                }, 1)
+            }
+        },
+        init: function () {
+            this.emit("transitionEnd transitionStart")
+        }
+    }), swiperVideo = new Swiper("#videos", {
+        allowTouchMove: !1,
+        parallax: !0,
+        speed: 1E3,
+        loop: !0,
+        loopedSlides: 3,
+        on: {
+            transitionEnd: function () {
+                this.slides.eq(this.previousIndex).find("video")[0].pause();
+                this.slides.eq(this.activeIndex).find("video")[0].play()
+            }, init: function () {
+                this.emit("transitionEnd")
+            }
+        }
+    });
+    swiperTitle.controller.control = swiperVideo;
+</script>
+</body>
+</html>
